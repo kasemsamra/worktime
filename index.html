@@ -3,543 +3,852 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arbeitszeiten Planer</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Work Time Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary-color-light: #3b82f6;
-            --secondary-color-light: #10b981;
-            --text-color-light: #1f2937;
-            --background-color-light: #f3f4f6;
-            --card-color-light: #ffffff;
-            --primary-color-dark: #60a5fa;
-            --secondary-color-dark: #34d399;
-            --text-color-dark: #f3f4f6;
-            --background-color-dark: #111827;
-            --card-color-dark: #1f2937;
-            --border-radius: 12px;
-            --primary-color: var(--primary-color-light);
-            --secondary-color: var(--secondary-color-light);
-            --text-color: var(--text-color-light);
-            --background-color: var(--background-color-light);
-            --card-color: var(--card-color-light);
-        }
-        body.dark-mode {
-            --primary-color: var(--primary-color-dark);
-            --secondary-color: var(--secondary-color-dark);
-            --text-color: var(--text-color-dark);
-            --background-color: var(--background-color-dark);
-            --card-color: var(--card-color-dark);
+            /* Color Palette */
+            --primary: #2563eb;
+            --primary-light: #3b82f6;
+            --primary-dark: #1d4ed8;
+            --success: #059669;
+            --warning: #d97706;
+            --error: #dc2626;
+            
+            /* Theme Colors */
+            --bg-light: #f8fafc;
+            --bg-dark: #0f172a;
+            --text-light: #334155;
+            --text-dark: #e2e8f0;
+            --card-light: #ffffff;
+            --card-dark: #1e293b;
+            --border-light: #e2e8f0;
+            --border-dark: #334155;
+            
+            /* UI Elements */
+            --radius-sm: 6px;
+            --radius: 12px;
+            --radius-lg: 16px;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        * {
+        .theme-dark {
+            --bg: var(--bg-dark);
+            --text: var(--text-dark);
+            --card: var(--card-dark);
+            --border: var(--border-dark);
+        }
+
+        .theme-light {
+            --bg: var(--bg-light);
+            --text: var(--text-light);
+            --card: var(--card-light);
+            --border: var(--border-light);
+        }
+
+        * { 
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            transition: background-color 0.3s, color 0.3s;
+            transition: var(--transition);
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            line-height: 1.6;
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            min-height: 100vh;
         }
 
-        .container {
-            max-width: 1200px;
+        .app {
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 2rem;
         }
 
-        .calendar-container {
-            background-color: var(--card-color);
-            border-radius: var(--border-radius);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            overflow: hidden;
+        .header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+            background: var(--card);
+            padding: 1rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--radius);
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .select {
+            padding: 0.75rem;
+            border: 2px solid var(--primary);
+            border-radius: var(--radius);
+            background: var(--card);
+            color: var(--text);
+            cursor: pointer;
+            font-weight: 500;
+            min-width: 120px;
+        }
+
+        .select:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--primary-light);
+        }
+
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
         }
 
         .calendar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: var(--primary-color);
-            color: white;
-            padding: 15px 20px;
-        }
-
-        .calendar-header h2 {
-            font-size: 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+            text-align: center;
             font-weight: 600;
         }
 
-        .calendar-header button {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .calendar-header button:hover {
-            transform: scale(1.2);
-        }
-
-        .theme-toggle {
-            background: none;
-            border: 2px solid white;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .theme-toggle:hover {
-            background-color: rgba(255,255,255,0.2);
-        }
-
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 10px;
-            padding: 20px;
-        }
-
-        .calendar-day {
-            background-color: var(--background-color);
-            border-radius: 8px;
-            padding: 10px;
-            min-height: 120px;
+        .day {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 1rem;
+            min-height: 150px;
             position: relative;
-            transition: all 0.3s ease;
-            border: 1px solid var(--primary-color);
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            box-shadow: var(--shadow-sm);
         }
 
-        .calendar-day:hover {
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transform: translateY(-5px);
+        .day:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
         }
 
         .day-number {
             font-weight: 600;
-            margin-bottom: 10px;
-            color: var(--primary-color);
+            font-size: 1.25rem;
         }
 
-        .work-entry {
-            background-color: var(--secondary-color);
+        .day-total {
+            font-size: 0.875rem;
+            color: var(--primary);
+        }
+
+        .entry {
+            background: var(--primary-light);
             color: white;
-            border-radius: 6px;
-            padding: 8px;
-            margin-top: 8px;
-            font-size: 0.8rem;
-            transition: background-color 0.3s;
-        }
-
-        .work-entry:hover {
-            background-color: #059669;
-        }
-
-        .add-entry-btn {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .add-entry-btn:hover {
-            background-color: #2563eb;
-            transform: rotate(90deg);
-        }
-
-        .summary-section {
-            background-color: var(--background-color);
-            padding: 20px;
+            padding: 0.75rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.875rem;
             display: flex;
             justify-content: space-between;
-            border-top: 1px solid var(--primary-color);
+            align-items: center;
+            gap: 0.5rem;
+            animation: fadeIn 0.3s ease-in-out;
         }
 
-        .summary-item {
-            text-align: center;
+        .entry-info {
             flex: 1;
         }
 
-        .summary-item h4 {
-            color: var(--primary-color);
-            margin-bottom: 5px;
+        .entry-actions {
+            display: flex;
+            gap: 0.5rem;
         }
 
-        #entryModal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            z-index: 1000;
+        .entry button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: var(--radius-sm);
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
+        .entry button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .stat-card {
+            background: var(--card);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            text-align: center;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+
+        .stat-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
         .modal-content {
-            background-color: var(--card-color);
-            border-radius: var(--border-radius);
-            width: 400px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            color: var(--text-color);
-        }
-
-        .modal-content input, 
-        .modal-content textarea {
+            background: var(--card);
+            padding: 2rem;
+            border-radius: var(--radius-lg);
             width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid var(--primary-color);
-            border-radius: 8px;
-            background-color: var(--background-color);
-            color: var(--text-color);
+            max-width: 500px;
+            box-shadow: var(--shadow-lg);
+            animation: slideIn 0.3s ease-out;
         }
 
-        .modal-buttons {
+        .modal-header {
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
         }
 
-        .modal-buttons button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
         }
 
-        .modal-buttons .save-btn {
-            background-color: var(--secondary-color);
-            color: white;
+        .form-group {
+            margin-bottom: 1.5rem;
         }
 
-        .modal-buttons .cancel-btn {
-            background-color: var(--background-color);
-            color: var(--text-color);
-            border: 1px solid var(--primary-color);
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
         }
 
-        .modal-buttons button:hover {
-            opacity: 0.9;
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 1rem;
         }
-        @media (max-width: 600px) {
-            .container {
-                padding: 10px;
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .calendar {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            }
+            
+            .calendar-header {
+                display: none;
             }
 
-            .calendar-grid {
-                grid-template-columns: repeat(3, 1fr); 
-                gap: 5px;
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
             }
 
-            .calendar-day {
-                min-height: 80px;
+            .select {
+                width: 100%;
             }
-
-            .modal-content {
-                width: 95%;
-                margin: 0 10px;
-                padding: 20px;
-            }
-        }
-        .calendar-day:focus-within, 
-        .add-entry-btn:focus,
-        .modal-buttons button:focus {
-            outline: 3px solid var(--primary-color);
-            outline-offset: 2px;
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <div class="calendar-container">
-            <div class="calendar-header">
-                <button id="prevMonth">←</button>
-                <h2 id="currentMonth">Juni 2024</h2>
-                <button id="nextMonth">→</button>
-                <button class="theme-toggle" id="themeToggle">🌓</button>
+<body class="theme-light">
+    <div class="app">
+        <header class="header">
+            <h1>Work Time Tracker Pro</h1>
+            <p>Erfassen und analysieren Sie Ihre Arbeitszeit effizient</p>
+        </header>
+
+        <div class="toolbar">
+            <button class="btn btn-outline" id="themeToggle" aria-label="Theme wechseln">
+                🌓 Design
+            </button>
+            <button class="btn" id="exportBtn" aria-label="Daten exportieren">
+                📤 Exportieren
+            </button>
+            <button class="btn" id="importBtn" aria-label="Daten importieren">
+                📥 Importieren
+            </button>
+            <button class="btn" id="statsBtn" aria-label="Statistiken anzeigen">
+                📊 Statistiken
+            </button>
+            <select id="yearSelect" class="select"></select>
+            <select id="monthSelect" class="select"></select>
+        </div>
+
+        <div class="calendar-header">
+            <div>Montag</div>
+            <div>Dienstag</div>
+            <div>Mittwoch</div>
+            <div>Donnerstag</div>
+            <div>Freitag</div>
+            <div>Samstag</div>
+            <div>Sonntag</div>
+        </div>
+
+        <div id="calendar" class="calendar" role="grid"></div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <h3>Gesamtstunden</h3>
+                <p class="stat-value" id="totalHours">0</p>
             </div>
-            <div class="calendar-grid" id="calendarGrid"></div>
-            
-            <div class="summary-section">
-                <div class="summary-item">
-                    <h4>Arbeitsstunden</h4>
-                    <span id="totalHours">0</span>
-                </div>
-                <div class="summary-item">
-                    <h4>Ø Stunden pro Tag</h4>
-                    <span id="avgHours">0</span>
-                </div>
-                <div class="summary-item">
-                    <h4>Case</h4>
-                    <span id="totalEmails">0</span>
-                </div>
+            <div class="stat-card">
+                <h3>Bearbeitete Fälle</h3>
+                <p class="stat-value" id="totalCases">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Fälle pro Stunde</h3>
+                <p class="stat-value" id="efficiency">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Durchschnitt/Tag</h3>
+                <p class="stat-value" id="avgHoursPerDay">0</p>
             </div>
         </div>
     </div>
 
-    <div id="entryModal">
+    <div id="entryModal" class="modal" role="dialog" aria-modal="true">
         <div class="modal-content">
-            <h3 id="modalTitle">Arbeitseintrag</h3>
-            <input type="time" id="startTime" placeholder="Start Zeit" required>
-            <input type="time" id="endTime" placeholder="End Zeit" required>
-            <input type="number" id="emailCount" min="0" placeholder="Case" required>
-            <textarea id="workNotes" placeholder="Zusätzliche Notizen"></textarea>
-            
-            <div class="modal-buttons">
-                <button class="cancel-btn" onclick="closeModal()">Abbrechen</button>
-                <button class="save-btn" onclick="saveEntry()">Speichern</button>
+            <div class="modal-header">
+                <h2 class="modal-title">Zeiteintrag</h2>
+                <button class="btn btn-outline" onclick="document.getElementById('entryModal').classList.remove('active')">✕</button>
             </div>
+            <form id="entryForm">
+                <div class="form-group">
+                    <label class="form-label" for="startTime">Startzeit</label>
+                    <input type="time" required id="startTime" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="endTime">Endzeit</label>
+                    <input type="time" required id="endTime" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="cases">Bearbeitete Fälle</label>
+                    <input type="number" required id="cases" min="0" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="notes">Notizen</label>
+                    <textarea id="notes" class="form-control" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn">Speichern</button>
+            </form>
         </div>
     </div>
-
     <script>
         class WorkTimeTracker {
             constructor() {
+                this.entries = this.loadData();
                 this.currentDate = new Date();
-                this.workEntries = this.loadWorkEntries();
-        
-                this.initializeEventListeners();
-                this.checkTheme();
-                this.renderCalendar();
+                this.selectedDate = null;
+                this.editingEntry = null;
+                this.initializeUI();
+                this.setupEventListeners();
             }
-        
-            loadWorkEntries() {
-                const entries = localStorage.getItem('workEntries');
-                return entries ? JSON.parse(entries) : {}; 
-            }
-        
-            saveWorkEntries() {
+
+            loadData() {
                 try {
-                    localStorage.setItem('workEntries', JSON.stringify(this.workEntries)); 
+                    const data = localStorage.getItem('workEntries');
+                    return data ? JSON.parse(data) : {};
                 } catch (error) {
-                    console.error('Fehler beim Speichern der Daten:', error);
-                    alert('Daten konnten nicht gespeichert werden. Überprüfen Sie die Local-Storage-Einstellungen.');
+                    console.error('Failed to load data:', error);
+                    this.showNotification('Fehler beim Laden der Daten', 'error');
+                    return {};
                 }
             }
-        
-            initializeEventListeners() {
-                document.getElementById('prevMonth').addEventListener('click', () => this.changeMonth(-1));
-                document.getElementById('nextMonth').addEventListener('click', () => this.changeMonth(1));
-                document.getElementById('themeToggle').addEventListener('click', () => this.toggleTheme());
-        
-                document.addEventListener('keydown', (e) => {
-                    if (e.key === 'Escape') {
-                        this.closeModal();
+
+            saveData() {
+                try {
+                    localStorage.setItem('workEntries', JSON.stringify(this.entries));
+                    this.showNotification('Daten erfolgreich gespeichert', 'success');
+                } catch (error) {
+                    console.error('Failed to save data:', error);
+                    this.showNotification('Fehler beim Speichern der Daten', 'error');
+                }
+            }
+
+            showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = `notification ${type} animate__animated animate__fadeInRight`;
+                notification.textContent = message;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.classList.replace('animate__fadeInRight', 'animate__fadeOutRight');
+                    setTimeout(() => notification.remove(), 500);
+                }, 3000);
+            }
+
+            setupEventListeners() {
+                // Theme toggle
+                document.getElementById('themeToggle').addEventListener('click', () => {
+                    const body = document.body;
+                    if (body.classList.contains('theme-dark')) {
+                        body.classList.remove('theme-dark');
+                        body.classList.add('theme-light');
+                        localStorage.setItem('theme', 'light');
+                    } else {
+                        body.classList.remove('theme-light');
+                        body.classList.add('theme-dark');
+                        localStorage.setItem('theme', 'dark');
                     }
                 });
-            }
-        
-            changeMonth(direction) {
-                this.currentDate.setMonth(this.currentDate.getMonth() + direction);
-                this.renderCalendar();
-            }
-        
-            toggleTheme() {
-                document.body.classList.toggle('dark-mode');
-                const isDarkMode = document.body.classList.contains('dark-mode');
-                localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
-            }
-        
-            checkTheme() {
-                const savedTheme = localStorage.getItem('theme');
-                const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        
-                if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
-                    document.body.classList.add('dark-mode');
-                } else {
-                    document.body.classList.remove('dark-mode');
-                }
-            }
-        
-            renderCalendar() {
-                const monthNames = ["Januar", "Februar", "März", "April", "Mai", "Juni", 
-                                    "Juli", "August", "September", "Oktober", "November", "Dezember"];
+
+                // Export/Import
+                document.getElementById('exportBtn').addEventListener('click', this.exportData.bind(this));
+                document.getElementById('importBtn').addEventListener('click', this.importData.bind(this));
+                document.getElementById('statsBtn').addEventListener('click', this.showDetailedStats.bind(this));
+
+                // Form handling
+                document.getElementById('entryForm').addEventListener('submit', this.handleFormSubmit.bind(this));
                 
-                document.getElementById('currentMonth').textContent = 
-                    `${monthNames[this.currentDate.getMonth()]} ${this.currentDate.getFullYear()}`;
-                
-                const grid = document.getElementById('calendarGrid');
-                grid.innerHTML = '';
-                
-                const firstDay = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), 1);
-                const lastDay = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() + 1, 0);
-                
-                for (let i = 0; i < firstDay.getDay(); i++) {
-                    grid.appendChild(document.createElement('div'));
-                }
-                
-                for (let day = 1; day <= lastDay.getDate(); day++) {
-                    const dayElement = document.createElement('div');
-                    dayElement.classList.add('calendar-day');
-                    
-                    const dateString = `${this.currentDate.getFullYear()}-${String(this.currentDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                    
-                    dayElement.innerHTML = `
-                        <div class="day-number">${day}</div>
-                        <div id="entries-${dateString}"></div>
-                        <button class="add-entry-btn" 
-                                onclick="tracker.openModal('${dateString}')" 
-                                aria-label="Arbeitseintrag hinzufügen">+</button>
-                    `;
-                    
-                    if (this.workEntries[dateString]) {
-                        const entriesDiv = dayElement.querySelector(`#entries-${dateString}`);
-                        this.workEntries[dateString].forEach((entry, index) => {
-                            entriesDiv.innerHTML += `
-                                <div class="work-entry" 
-                                     onclick="tracker.openModal('${dateString}', tracker.workEntries['${dateString}'][${index}])"
-                                     tabindex="0">
-                                    ${entry.startTime} - ${entry.endTime}<br>
-                                    Case: ${entry.emailCount}
-                                </div>
-                            `;
-                        });
+                // Close modal when clicking outside
+                document.getElementById('entryModal').addEventListener('click', (e) => {
+                    if (e.target.id === 'entryModal') {
+                        e.target.classList.remove('active');
                     }
-                    
-                    grid.appendChild(dayElement);
-                }
-                
-                this.updateMonthlySummary();
+                });
+
+                // Time validation
+                document.getElementById('endTime').addEventListener('change', this.validateTimes.bind(this));
             }
-        
-            openModal(date, entry = null) {
-                const modal = document.getElementById('entryModal');
-                const modalTitle = document.getElementById('modalTitle');
-                const startTimeInput = document.getElementById('startTime');
-                const endTimeInput = document.getElementById('endTime');
-                const emailCountInput = document.getElementById('emailCount');
-                const workNotesInput = document.getElementById('workNotes');
-        
-                modalTitle.textContent = entry ? 'Eintrag bearbeiten' : `Eintrag für ${date} hinzufügen`;
-                
-                if (entry) {
-                    startTimeInput.value = entry.startTime;
-                    endTimeInput.value = entry.endTime;
-                    emailCountInput.value = entry.emailCount;
-                    workNotesInput.value = entry.workNotes || '';
-                    modal.dataset.entryIndex = this.workEntries[date].indexOf(entry);
-                } else {
-                    startTimeInput.value = '';
-                    endTimeInput.value = '';
-                    emailCountInput.value = '';
-                    workNotesInput.value = '';
-                    modal.dataset.entryIndex = -1;
-                }
-        
-                modal.style.display = 'flex';
-                modal.dataset.currentDate = date;
-                startTimeInput.focus();
-            }
-        
-            closeModal() {
-                const modal = document.getElementById('entryModal');
-                modal.style.display = 'none';
-            }
-        
-            saveEntry() {
-                const modal = document.getElementById('entryModal');
-                const date = modal.dataset.currentDate;
-                const entryIndex = parseInt(modal.dataset.entryIndex);
+
+            validateTimes() {
                 const startTime = document.getElementById('startTime').value;
                 const endTime = document.getElementById('endTime').value;
-                const emailCount = document.getElementById('emailCount').value;
-                const workNotes = document.getElementById('workNotes').value;
-        
-                if (!startTime || !endTime || !emailCount) {
-                    alert('Bitte füllen Sie alle erforderlichen Felder aus!');
-                    return;
+                
+                if (startTime && endTime) {
+                    if (endTime <= startTime) {
+                        this.showNotification('Die Endzeit muss nach der Startzeit liegen', 'error');
+                        document.getElementById('endTime').value = '';
+                    }
                 }
-        
-                const entry = { 
-                    startTime, 
-                    endTime, 
-                    emailCount: parseInt(emailCount), 
-                    workNotes 
-                };
-        
-                if (!this.workEntries[date]) {
-                    this.workEntries[date] = [];
-                }
-        
-                if (entryIndex !== -1 && this.workEntries[date][entryIndex]) {
-                    this.workEntries[date][entryIndex] = entry;
-                } else {
-                    this.workEntries[date].push(entry);
-                }
-        
-                this.saveWorkEntries();
-                this.renderCalendar();
-                this.closeModal();
             }
-        
-            updateMonthlySummary() {
-                const monthEntries = Object.keys(this.workEntries)
-                    .filter(date => {
-                        const entryDate = new Date(date);
-                        return entryDate.getMonth() === this.currentDate.getMonth() 
-                               && entryDate.getFullYear() === this.currentDate.getFullYear();
-                    })
-                    .flatMap(date => this.workEntries[date]);
-        
-                const totalHours = monthEntries.reduce((sum, entry) => {
+
+            exportData() {
+                const data = JSON.stringify(this.entries, null, 2);
+                const blob = new Blob([data], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `worktime-backup-${new Date().toISOString().slice(0,10)}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+                this.showNotification('Daten erfolgreich exportiert', 'success');
+            }
+
+            importData() {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = '.json';
+                input.onchange = (e) => {
+                    const file = e.target.files[0];
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        try {
+                            this.entries = JSON.parse(event.target.result);
+                            this.saveData();
+                            this.renderCalendar();
+                            this.updateStats();
+                            this.showNotification('Daten erfolgreich importiert', 'success');
+                        } catch (error) {
+                            this.showNotification('Ungültiges Dateiformat', 'error');
+                        }
+                    };
+                    reader.readAsText(file);
+                };
+                input.click();
+            }
+
+            initializeUI() {
+                this.initializeDateSelectors();
+                this.renderCalendar();
+                this.updateStats();
+                
+                // Load saved theme
+                const savedTheme = localStorage.getItem('theme') || 'light';
+                document.body.className = `theme-${savedTheme}`;
+            }
+
+            initializeDateSelectors() {
+                const yearSelect = document.getElementById('yearSelect');
+                const monthSelect = document.getElementById('monthSelect');
+
+                const currentYear = this.currentDate.getFullYear();
+                for (let year = currentYear - 10; year <= currentYear + 10; year++) {
+                    const option = document.createElement('option');
+                    option.value = year;
+                    option.textContent = year;
+                    if (year === currentYear) option.selected = true;
+                    yearSelect.appendChild(option);
+                }
+
+                const months = [
+                    'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
+                    'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'
+                ];
+                months.forEach((month, index) => {
+                    const option = document.createElement('option');
+                    option.value = index;
+                    option.textContent = month;
+                    if (index === this.currentDate.getMonth()) option.selected = true;
+                    monthSelect.appendChild(option);
+                });
+
+                yearSelect.addEventListener('change', () => {
+                    this.renderCalendar();
+                    this.updateStats();
+                });
+                monthSelect.addEventListener('change', () => {
+                    this.renderCalendar();
+                    this.updateStats();
+                });
+            }
+
+            renderCalendar() {
+                const calendar = document.getElementById('calendar');
+                calendar.innerHTML = '';
+
+                const year = parseInt(document.getElementById('yearSelect').value);
+                const month = parseInt(document.getElementById('monthSelect').value);
+                const firstDay = new Date(year, month, 1);
+                const lastDay = new Date(year, month + 1, 0);
+
+                // Adjust for Monday as first day of week
+                let firstDayOfWeek = firstDay.getDay() - 1;
+                if (firstDayOfWeek === -1) firstDayOfWeek = 6;
+
+                // Add empty cells for days before the first of the month
+                for (let i = 0; i < firstDayOfWeek; i++) {
+                    const emptyDay = document.createElement('div');
+                    emptyDay.className = 'day';
+                    calendar.appendChild(emptyDay);
+                }
+
+                // Create calendar days
+                for (let date = 1; date <= lastDay.getDate(); date++) {
+                    const dayEl = this.createDayElement(date, year, month);
+                    calendar.appendChild(dayEl);
+                }
+            }
+
+            createDayElement(date, year, month) {
+                const dayEl = document.createElement('div');
+                dayEl.className = 'day';
+
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
+                const isToday = dateStr === new Date().toISOString().slice(0, 10);
+                
+                if (isToday) {
+                    dayEl.style.borderColor = 'var(--primary)';
+                    dayEl.style.borderWidth = '2px';
+                }
+
+                const dayHeader = document.createElement('div');
+                dayHeader.className = 'day-header';
+                
+                const dayNumber = document.createElement('span');
+                dayNumber.className = 'day-number';
+                dayNumber.textContent = date;
+                
+                const dayTotal = document.createElement('span');
+                dayTotal.className = 'day-total';
+                
+                if (this.entries[dateStr]) {
+                    const totalHours = this.calculateDayTotal(dateStr);
+                    dayTotal.textContent = `${totalHours}h`;
+                }
+
+                dayHeader.appendChild(dayNumber);
+                dayHeader.appendChild(dayTotal);
+                dayEl.appendChild(dayHeader);
+
+                if (this.entries[dateStr]) {
+                    this.entries[dateStr].forEach((entry, index) => {
+                        const entryEl = this.createEntryElement(entry, dateStr, index);
+                        dayEl.appendChild(entryEl);
+                    });
+                }
+
+                dayEl.addEventListener('click', () => {
+                    this.selectedDate = dateStr;
+                    this.editingEntry = null;
+                    this.openEntryModal();
+                });
+
+                return dayEl;
+            }
+
+            createEntryElement(entry, dateStr, index) {
+                const entryEl = document.createElement('div');
+                entryEl.className = 'entry';
+                
+                const infoEl = document.createElement('div');
+                infoEl.className = 'entry-info';
+                infoEl.textContent = `${entry.startTime} - ${entry.endTime} (${entry.cases} Fälle)`;
+                
+                const actionsEl = document.createElement('div');
+                actionsEl.className = 'entry-actions';
+                
+                const editBtn = document.createElement('button');
+                editBtn.innerHTML = '✏️';
+                editBtn.title = 'Bearbeiten';
+                editBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    this.editEntry(dateStr, index);
+                };
+                
+                const deleteBtn = document.createElement('button');
+                deleteBtn.innerHTML = '🗑️';
+                deleteBtn.title = 'Löschen';
+                deleteBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    this.deleteEntry(dateStr, index);
+                };
+                
+                actionsEl.appendChild(editBtn);
+                actionsEl.appendChild(deleteBtn);
+                
+                entryEl.appendChild(infoEl);
+                entryEl.appendChild(actionsEl);
+                
+                if (entry.notes) {
+                    entryEl.title = entry.notes;
+                }
+                
+                return entryEl;
+            }
+
+            calculateDayTotal(dateStr) {
+                return this.entries[dateStr].reduce((total, entry) => {
                     const [startHour, startMin] = entry.startTime.split(':').map(Number);
                     const [endHour, endMin] = entry.endTime.split(':').map(Number);
-                    
-                    const hours = (endHour - startHour) + (endMin - startMin) / 60;
-                    return sum + hours;
-                }, 0);
-        
-                const totalEmails = monthEntries.reduce((sum, entry) => sum + parseInt(entry.emailCount), 0);
+                    return total + (endHour - startHour + (endMin - startMin) / 60);
+                }, 0).toFixed(1);
+            }
+
+            openEntryModal() {
+                const modal = document.getElementById('entryModal');
+                const form = document.getElementById('entryForm');
                 
-                const workDays = new Set(Object.keys(this.workEntries)
-                    .filter(date => {
-                        const entryDate = new Date(date);
-                        return entryDate.getMonth() === this.currentDate.getMonth() 
-                               && entryDate.getFullYear() === this.currentDate.getFullYear();
-                    })).size;
-        
-                document.getElementById('totalHours').textContent = totalHours.toFixed(2);
-                document.getElementById('avgHours').textContent = (totalHours / (workDays || 1)).toFixed(2);
-                document.getElementById('totalEmails').textContent = totalEmails;
+                if (this.editingEntry !== null) {
+                    const entry = this.entries[this.selectedDate][this.editingEntry];
+                    form.startTime.value = entry.startTime;
+                    form.endTime.value = entry.endTime;
+                    form.cases.value = entry.cases;
+                    form.notes.value = entry.notes || '';
+                } else {
+                    form.reset();
+                }
+                
+                modal.classList.add('active');
+            }
+
+            handleFormSubmit(e) {
+                e.preventDefault();
+                
+                const entry = {
+                    startTime: e.target.startTime.value,
+                    endTime: e.target.endTime.value,
+                    cases: parseInt(e.target.cases.value),
+                    notes: e.target.notes.value
+                };
+
+                if (this.editingEntry !== null) {
+                    this.entries[this.selectedDate][this.editingEntry] = entry;
+                    this.showNotification('Eintrag aktualisiert', 'success');
+                } else {
+                    if (!this.entries[this.selectedDate]) {
+                        this.entries[this.selectedDate] = [];
+                    }
+                    this.entries[this.selectedDate].push(entry);
+                    this.showNotification('Neuer Eintrag erstellt', 'success');
+                }
+
+                this.saveData();
+                this.renderCalendar();
+                this.updateStats();
+                
+                document.getElementById('entryModal').classList.remove('active');
+                this.editingEntry = null;
+                e.target.reset();
+            }
+
+            editEntry(date, index) {
+                this.selectedDate = date;
+                this.editingEntry = index;
+                this.openEntryModal();
+            }
+
+            deleteEntry(date, index) {
+                if (confirm('Möchten Sie diesen Eintrag wirklich löschen?')) {
+                    this.entries[date].splice(index, 1);
+                    if (this.entries[date].length === 0) {
+                        delete this.entries[date];
+                    }
+                    this.saveData();
+                    this.renderCalendar();
+                    this.updateStats();
+                    this.showNotification('Eintrag gelöscht', 'success');
+                }
+            }
+
+            updateStats() {
+                const year = parseInt(document.getElementById('yearSelect').value);
+                const month = parseInt(document.getElementById('monthSelect').value);
+                
+                let totalHours = 0;
+                let totalCases = 0;
+                let workingDays = 0;
+
+                Object.entries(this.entries).forEach(([date, entries]) => {
+                    const entryDate = new Date(date);
+                    if (entryDate.getFullYear() === year && entryDate.getMonth() === month) {
+                        const dayTotal = entries.reduce((total, entry) => {
+                            const [startHour, startMin] = entry.startTime.split(':').map(Number);
+                            const [endHour, endMin] = entry.endTime.split(':').map(Number);
+                            const hours = (endHour - startHour) + (endMin - startMin) / 60;
+                            totalCases += entry.cases;
+                            return total + hours;
+                        }, 0);
+                        
+                        totalHours += dayTotal;
+                        if (dayTotal > 0) workingDays++;
+                    }
+                });
+
+                document.getElementById('totalHours').textContent = totalHours.toFixed(1);
+                document.getElementById('totalCases').textContent = totalCases;
+                document.getElementById('efficiency').textContent = 
+                    totalHours > 0 ? (totalCases / totalHours).toFixed(1) : '0';
+                document.getElementById('avgHoursPerDay').textContent = 
+                    workingDays > 0 ? (totalHours / workingDays).toFixed(1) : '0';
+            }
+
+            showDetailedStats() {
+                // Implementierung für detaillierte Statistiken
+                // Kann später hinzugefügt werden
             }
         }
-        
+
+        // Initialize the application
         const tracker = new WorkTimeTracker();
-        
-        document.addEventListener('DOMContentLoaded', () => {
-            const cancelButton = document.querySelector('.cancel-btn');
-            const saveButton = document.querySelector('.save-btn');
-        
-            if (cancelButton) {
-                cancelButton.onclick = () => tracker.closeModal();
-            }
-        
-            if (saveButton) {
-                saveButton.onclick = () => tracker.saveEntry();
-            }
-        });
-        </script>
-        </body>
+    </script>
+</body>
 </html>
